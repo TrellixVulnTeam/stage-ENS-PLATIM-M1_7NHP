@@ -1,0 +1,99 @@
+22/03/2021
+-Reduced GUI minimal/default size so that it can better be used on computers with small screens
+
+23/02/2021
+-Fixed a big memory leak in 'Predict'
+
+01-20/01/2021
+-version changed to 0.1.21
+-Added 'Ensemble' tools (not public yet)
+-Added denoising/surface projection models based on CARE (not public yet)
+-Added masking tools to force the model to learn from pixel neighborhood rather than identity (not public yet)
+-Working on support for ImageJ Rois/Overlays (not public yet)
+-Fixed bugs and added new features to the Img class
+-Added 'keep first channel only' to the post process options (useful for denoising models in order to only keep the denoised image and remove the segmentation masks because the latter often are suboptimal/low quality)
+-Added a tool to preview all images of a folder and a tool to preview outputs of different models (not public yet)
+-Added a tool to load and store GUI settings (not public yet)
+-Modified the code so that a preview is always shown even when no model is selected (for example in the case of ensemble, where models are undefined until the last minute)
+-Fixed a bug occurring when images had too many channels
+
+15/12/2020
+-Fixed a big bug in the flip data augmentation
+-Added 'Shuffle along the Z axis' and 'Roll along the Z axis' data augmentation for 3D images, useful to train best focus deep learning
+
+09/12/2020
+-Added a tip text to the lineedit to explain that they handle DND for users not aware about it...
+-Fixed minot bugs
+-Added versions for models, allowing me to easily add new model without breaking anything for early birds
+-Fixed a bug in 3D data generator
+
+03/12/2020
+-Improved the shuffle option in the datagenerator to mix between generators if multiple sets are available. 'Shuffle' is now enabled by default. 'Shuffle' was added to the training parameters of the GUI.
+-Implemented random crop in datagenerator/GUI (Would need some more controls to be sure the crop is really feasible for the image, if not then return an error or increase size of the array ???, ok for now)
+-Changed padding mode for datagenerator from 0 to 'reflect'
+
+01/12/2020
+-Added percentile normalisation
+-Moved the normalization to happen earlier in the code (importantly, patches are now normalized using global intensity instead of local one) @myself could be a parameter in fact
+-Moved image intensity 'Clip' to happen much earlier in the code
+-Added 'Debug mode' in GUI settings
+-Set 'remove bg noise' to 'None' by default in 'Predict' as it helps only in rare cases (has a negative impact in most cases except when images have a low membrane to cytoplasm ratio)
+
+30/11/2020
+-Fixed top hat filter for 3D images (in fact top hat does not work well for noisy images)
+-Disabled bg subtraction by default in EPySeg
+-Decreased minimum for image clipping/removing of outliers to 10-3% instead of 0.01%
+-Changed version to 0.1.17
+
+27/11/2020
+-Fixed clip error (affecting only some dtype if the range [0,1])
+
+26/11/2020
+-Fixed a bug affecting 3D datagenerators when images had different Z dimension size
+
+23/11/2020
+-Added support for square ROI (image crop prior to training) as it allows more data augmentation
+-Added manual edit of ROIs (to precisely define ROIs rather than doing it manually, i.e. more robust ROI)
+
+19/11/2020
+-Fixed a bug in retraining EPySeg model when input masks were 32 bits
+-Added None to the interpolation free data augmentation to avoid under representation of the untransformed image
+
+12-16/11/2020
+-Fixed a bug when 'rotate (interpolation free)' was used as an augmentation and image had different width and height
+-Fixed float32 image preview when they had negative values...
+-Fixed a bug when retraining the EPySeg model (bug was linked to the nb of channels of GT)
+-Replaced from skimage.morphology import watershed with from skimage.segmentation import watershed (as it will be removed in future versions)
+-Added support for setting learning rate to the EPySeg GUI
+-Added reduce learning rate on plateau to the EPySeg GUI
+-Re-trained model will be pushed later this week or the week after
+-Fixed an issue with validation data (validation dataset was not properly created)
+-Enabled interpolation free data augmentation by default (check box at the bottom of data augmentation)
+
+10/11/2020
+-Fixed a big bug forcing binarisation of model predictions (the bug affects custom/user loaded models, except if it has 7 classes)
+-Added support for *.lsm files (may crash if lsm contain more than one time point, same is true for tifs btw --> need do some changes in the code at some point to support time)
+
+10/09/2020
+-Reduced number of pretrained models to one (that model is globally more sensitive/precise/versatile than the other)
+-Changed the mask refinement algorithm for the pretrained model
+-Removed the 'post process' tab (redundant with that in the 'predict' tab)
+-Greatly improved/extended documentation
+-Added help buttons throughout the GUI
+-Cleaned the GUI
+
+17/07/2020
+-Tensorflow-gpu is not installed by default on Mac (i.e. fixed the setup.py file)
+
+16/07/2020
+-Fixed a bug that may have filled the google drive trash bin unnecessarily
+
+15/07/2020
+-Fixed a windows specific bug due to os.rename with existing file (changed to os.replace, see https://stackoverflow.com/questions/45636341/is-it-wise-to-remove-files-using-os-rename-instead-of-os-remove-in-python)
+
+08/07/2020
+-Made the code backwards compatible with tf 2.0.0 to allow support for anaconda (https://anaconda.org/anaconda/tensorflow)
+-'Refine' is now enabled by default when using a pre-trained model because it should increase output quality in most cases
+
+16/06/2020
+-First public release
