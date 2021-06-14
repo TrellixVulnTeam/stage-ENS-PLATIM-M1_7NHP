@@ -40,12 +40,12 @@ for i in fichiersf1:
         # if(i.i.split('_')[1])
         # print(i.split(".")[0])
         # print(re.findall( '[a-zA-Z]', i.split(".")[0]))
-
+        doublon = False
+        suffixe = ""
+        suffixeMasque = ""
 
         # print(re.findall( '[a-zA-Z]', i.split(".")[0]))
         # print(to_str(re.findall( '[a-zA-Z]', i.split(".")[0])))
-
-        
 
         # print(re.findall( '[0-9]', i.split(".")[0]))
         est_tf = not(re.findall( 'tf', i.split(".")[0]) is None)
@@ -58,25 +58,58 @@ for i in fichiersf1:
         # print(to_str(re.findall( '[0-9]', i.split(".")[0]))+"l.png")
 
         # os.remove("./class1/" + i + "_t.png")
-        if(to_str(re.findall( '[a-zA-Z]', i.split(".")[0])) == "t"):
-            if(not (to_str(re.findall( '[0-9]', i.split(".")[0]))+"l.png" in fichiersf2) ):
-                print("non t")
-                nbsup1 = nbsup1 + 1
 
+        # print(i, " - ", to_str(re.findall( '[a-zA-Z]', i.split(".")[0])))
+        if(to_str(re.findall( '[a-zA-Z]', i.split(".")[0])) == "t"):
+            suffixe = "t"
+            suffixeMasque = "l"
+            doublon = True
+
+            if(not (to_str(re.findall( '[0-9]', i.split(".")[0]))+"l.png" in fichiersf2) ):
                 print(i)
+                print("non l")
+                nbsup1 = nbsup1 + 1
+                doublon = False
+
 
         if(to_str(re.findall( '[a-zA-Z]', i.split(".")[0])) == "tf"):
+            suffixe = "tf"
+            suffixeMasque = "lf"
+            doublon = True
+
             if(not (to_str(re.findall( '[0-9]', i.split(".")[0]))+"lf.png" in fichiersf2) ):
                 nbsup1 = nbsup1 + 1
-                print("non tf")
+                doublon = False
+                print(i)
+                print("non lf")
 
         if(to_str(re.findall( '[a-zA-Z]', i.split(".")[0])) == "tr"):
-            if(not (to_str(re.findall( '[0-9]', i.split(".")[0]))+"lr.png" in fichiersf2) ):
-                print(to_str(re.findall( '[0-9]', i.split(".")[0]))+"lr.png")
-                nbsup1 = nbsup1 + 1
+            # print(to_str(re.findall( '[0-9]', i.split(".")[0]))+"lr.png")
+            suffixe = "tr"
+            suffixeMasque = "lr"
+            doublon = True
 
-                print("non tr")
-    print(to_str(i.split('_')[1]))
+            if(not (to_str(re.findall( '[0-9]', i.split(".")[0]))+"lr.png" in fichiersf2) ):
+                # print(to_str(re.findall( '[0-9]', i.split(".")[0]))+"lr.png")
+                nbsup1 = nbsup1 + 1
+                doublon = False
+                print(i)
+                print("non lr")
+    # print(to_str(i.split('_')[1]))
+        if doublon:
+            dir_path = os.path.dirname(os.path.realpath(__file__))
+            # print(dir_path)
+            os.rename("./class1/" + i, dir_path + "./class1/" + i.split('.')[0] + "_" + suffixe + ".png")
+            os.rename("./masque/" + to_str(re.findall( '[0-9]', i.split(".")[0]))+ suffixeMasque + ".png",   "./masque/" + to_str(re.findall( '[0-9]', i.split(".")[0]))+ suffixeMasque + "_" + suffixeMasque + ".png")
+        else : 
+            # print("./class1/" + i, "./class1/" + i.split('.')[0] + "_" + suffixe + ".png")
+            # print("./masque/" + to_str(re.findall( '[0-9]', i.split(".")[0]))+ suffixeMasque + ".png")
+            os.remove("./class1/" + i)
+            # os.rename("./class1/" + i, dir_path + "./class1/" + i.split('.')[0] + "_" + suffixe + ".png")
+            # os.rename("./masque/" + to_str(re.findall( '[0-9]', i.split(".")[0]))+ suffixeMasque + ".png",   "./masque/" + to_str(re.findall( '[0-9]', i.split(".")[0])) + "_" + suffixeMasque + ".png")
+
+
+
         
         
 print(nbsup1)
