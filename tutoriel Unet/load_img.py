@@ -29,17 +29,20 @@ train_masque = datagen.flow_from_directory('cell_nuclei_train_label_f_only', cla
 
 
 noyeau_root = pathlib.Path(r'D:\DATA-USERS\Ambre Lamouchi\GitHub\stage-ENS-PLATIM-M1\tutoriel Unet\unet_img')
-print(noyeau_root)
+# print(noyeau_root)
 # PIL.Image.open("./cell_nuclei_train_f_only/class1/0_t.png").show()
 
 # print(type(train_masque))
 
-for item in noyeau_root.glob("*"):
-  print(item.name)
+# for item in noyeau_root.glob("*"):
+#   print(item.name)
+
 
 list_ds = tf.data.Dataset.list_files(str(noyeau_root/'img/*'))
 list_dm = tf.data.Dataset.list_files(str(noyeau_root/'label/*'))
 
+print(train_img)
+print(list_ds)
 
 # for f in list_ds.take(5):
 #   print(f.numpy())
@@ -49,8 +52,9 @@ def process_path(file_path):
   return tf.io.read_file(file_path), label
 
 labeled_ds = list_ds.map(process_path)
-labeled_dm = list_ds.map(process_path)
+labeled_dm = list_dm.map(process_path)
 
+# print(list_ds)
 
 # for image_raw, label_text in labeled_ds.take(1):
 #   print(type(image_raw))
@@ -72,26 +76,29 @@ def parse_image(filename):
 
 
 file_path = next(iter(list_ds))
-file_path2 = next(iter(list_ds))
+file_path2 = next(iter(list_dm))
 
 image, label = parse_image(file_path)
 image2, label2 = parse_image(file_path2)
 
-print(image)
+for element in list_ds.take(10).as_numpy_iterator():
+  print(element)
 
 def show(image, label):
   plt.figure()
   plt.imshow(image)
   plt.title(label.numpy().decode('utf-8'))
   plt.axis('off')
-  
+ 
 
-print(1)
-print(len(image))
-show(image, label)
-show(image2, label2)
+# print(len(image))
+
+# show(image, label)
+# show(image2, label2)
 
 plt.show()
+
+print("#########################################################")
 
 
 
