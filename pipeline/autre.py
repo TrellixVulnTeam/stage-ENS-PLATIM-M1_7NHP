@@ -24,19 +24,19 @@ print(fichiersf2[0])
 fichier = open("data.csv", "a")
 taille = len(fichiersf1)
 for i in range(0, int(taille*0.70)):
-    os.rename('.\class1\\'+fichiersf1[i],'.\data\\train_img\\img'+str(i)+".png")
+    os.rename('.\class1\\'+fichiersf1[i],'.\data\\train_frames\\frame_'+str(i)+".png")
     print("img",i, " ", "masque",i)
-    os.rename('.\masque\\'+fichiersf2[i],'.\data\\train_mask\\mask'+str(i)+".png")
+    os.rename('.\masque\\'+fichiersf2[i],'.\data\\train_masks\\mask_'+str(i)+".png")
 
 for i in range(int(taille*0.70)+1, int(taille*0.70) + int(taille*0.20)):
-    os.rename('.\class1\\'+fichiersf1[i],'.\data\\val_img\\img'+str(i)+".png")
+    os.rename('.\class1\\'+fichiersf1[i],'.\data\\val_frames\\frame_'+str(i)+".png")
     print("img",i, " ", "masque",i)
-    os.rename('.\masque\\'+fichiersf2[i],'.\data\\val_mask\\mask'+str(i)+".png")
+    os.rename('.\masque\\'+fichiersf2[i],'.\data\\val_masks\\mask_'+str(i)+".png")
 
 for i in range(int(taille*0.70) + int(taille*0.20)+1, taille):
-    os.rename('.\class1\\'+fichiersf1[i],'.\data\\test_img\\img'+str(i)+".png")
+    os.rename('.\class1\\'+fichiersf1[i],'.\data\\test_frames\\frame_'+str(i)+".png")
     print("img",i, " ", "masque",i)
-    os.rename('.\masque\\'+fichiersf2[i],'.\data\\test_mask\\mask'+str(i)+".png")
+    os.rename('.\masque\\'+fichiersf2[i],'.\data\\test_masks\\mask_'+str(i)+".png")
 
     # os.rename('.\masque\\'+fichiersf2[i],'.\label\\mask'+str(i)+".png")
     # fichier.write(fichiersf1[i]+","+fichiersf2[i]+'\n')
