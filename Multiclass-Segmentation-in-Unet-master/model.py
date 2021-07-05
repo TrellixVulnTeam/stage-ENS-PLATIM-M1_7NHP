@@ -64,6 +64,3 @@ def build_unet(shape, num_classes):
 if __name__ == "__main__":
     model = build_unet((256, 256, 3), 10)
     model.summary()
-
-
-##

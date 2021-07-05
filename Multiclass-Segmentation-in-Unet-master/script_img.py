@@ -14,18 +14,12 @@ train_masks = os.listdir("data/train_masks/train/")
 val_masks = os.listdir("data/val_masks/val/")
 
 tab = [0]*256
-imgs =[]
+imgs = []
 for img in test_masks:
     x = cv2.imread("data/test_masks/"+img, cv2.IMREAD_GRAYSCALE)
     x = cv2.resize(x, (W, H))
-
-    # print( x[255][255] )
-
     for h in range (0, 256):
         for l in range (0, 256):
-            # print(l)
-            # print(int(l))
-            # print(h,l)
             if(x[h][l] == 255):
                 x[h][l] = 2
             else: 
@@ -33,22 +27,14 @@ for img in test_masks:
                     x[h][l] = 0
                 else:
                     x[h][l] = 1
-
-            # tab[int(l)] += 1
     imgs.append(x)
     cv2.imwrite("data_2/test_masks/"+img,x)
 
 for img in train_masks:
     x = cv2.imread("data/train_masks/train/"+img, cv2.IMREAD_GRAYSCALE)
     x = cv2.resize(x, (W, H))
-
-    # print( x[255][255] )
-
     for h in range (0, 256):
         for l in range (0, 256):
-            # print(l)
-            # print(int(l))
-            # print(h,l)
             if(x[h][l] == 255):
                 x[h][l] = 2
             else: 
@@ -57,7 +43,6 @@ for img in train_masks:
                 else:
                     x[h][l] = 1
 
-            # tab[int(l)] += 1
     imgs.append(x)
     cv2.imwrite("data_2/train_masks/train/"+img,x)
 
@@ -69,9 +54,6 @@ for img in val_masks:
 
     for h in range (0, 256):
         for l in range (0, 256):
-            # print(l)
-            # print(int(l))
-            # print(h,l)
             if(x[h][l] == 255):
                 x[h][l] = 2
             else: 
@@ -79,8 +61,6 @@ for img in val_masks:
                     x[h][l] = 0
                 else:
                     x[h][l] = 1
-
-            # tab[int(l)] += 1
     imgs.append(x)
     cv2.imwrite("data_2/val_masks/val/"+img,x)
 
