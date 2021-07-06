@@ -1,16 +1,13 @@
-import os
-import tempfile
+# from yapic.session import Session
+import yapicy
+from yapic.session import Session
 
-from matplotlib import pyplot as plt
-import numpy as np
-import tensorflow as tf
 
-tmpdir = tempfile.mkdtemp()
+img_path = 'test_frames/train/*.tif'
+results_path = 'results_yapic/'
 
-physical_devices = tf.config.list_physical_devices('GPU')
-for device in physical_devices:
-  tf.config.experimental.set_memory_growth(device, True)
+t = yapic.session.Session()
+t.load_prediction_data(img_path, results_path)
+t.load_model('my_model.h5')
 
-file = tf.keras.utils.get_file(
-    "frame_3067.png",
-    "stp.png")
+t.predict()
