@@ -11,6 +11,8 @@ from PIL import Image
 
 import cv2
 
+def write_array_masck(p):
+    tab = []
 
 def alert():
     tk.messagebox.showinfo("alerte", "Bravo!")
@@ -20,6 +22,7 @@ class Application(tk.Frame):
         super().__init__(master)
 
         self.master = master
+        self.master.heght = 100
         self.pack()
         self.monCanva = None
         self.creat_widget()
@@ -54,40 +57,66 @@ class Application(tk.Frame):
         self.filepath = askopenfilename(title="Ouvrir une image",filetypes=[('png files','.png'),('tiff files','.tif')])
         print(self.filepath)
         self.im = Image.open(self.filepath)
-        # self.im.show()
-        # self.im.show()
-        # p = predition_img(self.filepath)
-        # print(type(p))
-        width, height = self.im.size
+
+        self.width, self.height = self.im.size
         self.photo = ImageTk.PhotoImage(self.im)
         print("self.im", self.im)
 
-        # print(type(photo))
-
-        print(width, height)
         if self.monCanva is None:
-            self.monCanva = tk.Canvas(self,width = width+1, height = height+1)
-            # , bg = "blue")
+            self.monCanva = tk.Canvas(self,width = self.width+1, height = self.height+1, bg = "blue")
 
-        self.monCanva.create_image(0, 0, image = self.photo)
+        self.monCanva.create_image(0, 0, image = self.photo, anchor=tk.NW)
         # self.monCanva.create_oval(1,1,width, height, fill = "red")
         self.monCanva.image = self.im
+        print(self.im.mode)
         self.monCanva.pack()
+
+        np_im = np.array(self.im)
+
+        print(np_im)
+
     
     def print_prediction(self):
-        p = predition_img(self.filepath)
-        print(type(p))
-        print(p)
-        cv2.imwrite(f"test_moii.png", p)
+        self.p = predition_img(self.filepath)
 
-        # pil_image=Image.fromarray(p)
-        # pil_image.show()
-    
+        print(self.p)
+        print(len(self.p))
+        print(len(self.p[0]))
+
+        self.p = self.p.astype(np.uint8)
+
+        tab = self.filepath.split('/')
+        self.name = tab[len(tab)-1].split('.')[0]
+        name_mask = self.name + "_mask.tif"
+        # cv2.imwrite(name_mask, self.p)
+        # self.im = Image.open(name_mask)
+        # self.photoMask = ImageTk.PhotoImage(self.im)
+        new_im = Image.fromarray(self.p)
+        print(new_im)
+        # new_im.show()
+        self.create_top(new_im)
+
+    def create_top(self, new_im):
+        top = tk.Toplevel(self.master)
+        top.title("masque")
+        canvas = tk.Canvas(top, width = self.width+1, height = self.height+1, bg = "red")
+        canvas.pack()
+        # print(new_im)
+        self.photoM = ImageTk.PhotoImage(new_im)
+        photo2 = ImageTk.PhotoImage(self.im)
+
+        # print(photo.height(), photo.width())
+        canvas.create_image( 0,0, image = self.photoM, anchor=tk.NW)
+        # canvas.image = new_im
+
+
     def test(self):
         array = np.random.randint(255, size=(400, 400),dtype=np.uint8)
         image = Image.fromarray(array)
         # image.show()
-        print(array)
+        # print(array)
+
+        print(self.name + "_mask.tif")
 
 if __name__ == "__main__":
     root = tk.Tk()
