@@ -49,8 +49,8 @@ if __name__ == "__main__":
 
 
     """ Model """
-    model = tf.keras.models.load_model("model.h5")
-    tf.saved_model.save(model, "model_pb" , signatures=None, options=None)
+    model = tf.keras.models.load_model("model_1.h5")
+    # tf.saved_model.save(model, "model_pb" , signatures=None, options=None)
     """ Saving the masks """
     for x, y in tqdm(zip(test_x, test_y), total=len(test_x)):
         # print("results/{}", name)

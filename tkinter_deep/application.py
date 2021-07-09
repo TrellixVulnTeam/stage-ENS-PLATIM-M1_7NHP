@@ -22,7 +22,8 @@ class Application(tk.Frame):
         super().__init__(master)
 
         self.master = master
-        self.master.heght = 100
+        self.master.title("le titre est cool")
+        self.master.geometry('200x200')
         self.pack()
         self.monCanva = None
         self.creat_widget()
@@ -68,12 +69,9 @@ class Application(tk.Frame):
         self.monCanva.create_image(0, 0, image = self.photo, anchor=tk.NW)
         # self.monCanva.create_oval(1,1,width, height, fill = "red")
         self.monCanva.image = self.im
-        print(self.im.mode)
         self.monCanva.pack()
 
         np_im = np.array(self.im)
-
-        print(np_im)
 
     
     def print_prediction(self):
@@ -92,7 +90,6 @@ class Application(tk.Frame):
         # self.im = Image.open(name_mask)
         # self.photoMask = ImageTk.PhotoImage(self.im)
         new_im = Image.fromarray(self.p)
-        print(new_im)
         # new_im.show()
         self.create_top(new_im)
 
@@ -113,8 +110,6 @@ class Application(tk.Frame):
     def test(self):
         array = np.random.randint(255, size=(400, 400),dtype=np.uint8)
         image = Image.fromarray(array)
-        # image.show()
-        # print(array)
 
         print(self.name + "_mask.tif")
 
