@@ -22,8 +22,8 @@ class Application(tk.Frame):
         super().__init__(master)
 
         self.master = master
-        self.master.title("le titre est cool")
-        self.master.geometry('200x200')
+        self.master.title("DeepLearning Segmentation")
+        self.master.geometry('400x200')
         self.pack()
         self.monCanva = None
         self.creat_widget()
