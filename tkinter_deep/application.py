@@ -11,11 +11,37 @@ from PIL import Image
 
 import cv2
 
+list_masque = ["UNET", "autre", "autre"]
+
 def write_array_masck(p):
     tab = []
 
 def alert():
     tk.messagebox.showinfo("alerte", "Bravo!")
+
+def taille_canvas(h,w):
+    return str(h)+ "x"+ str(w)
+
+
+class masque(tk.Frame):
+    def __init__(self, master=None):
+        super().__init__(master)
+        self.master = master
+        self.master.title("DeepLearning Segmentation")
+        
+        self.img = None
+        self.type_masque = None
+
+        # self.type = type_masque
+        # self.img = img
+    def add(self, img, type_masque):
+        self.img = img
+        self.type_masque = type_masque
+        self.master.title(type_masque)
+        str = taille_canvas(500,500)
+        self.master.geometry(str)
+
+
 
 class Application(tk.Frame):
     def __init__(self, master=None):
@@ -23,11 +49,12 @@ class Application(tk.Frame):
 
         self.master = master
         self.master.title("DeepLearning Segmentation")
-        self.master.geometry('400x200')
+        self.master.geometry('300x0')
         self.pack()
         self.monCanva = None
         self.creat_widget()
         self.add_menu()
+
     
     def creat_widget(self):
         print("creat")
@@ -70,6 +97,7 @@ class Application(tk.Frame):
         # self.monCanva.create_oval(1,1,width, height, fill = "red")
         self.monCanva.image = self.im
         self.monCanva.pack()
+        self.master.geometry(taille_canvas(self.width, self.height))
 
         np_im = np.array(self.im)
 
@@ -108,10 +136,14 @@ class Application(tk.Frame):
 
 
     def test(self):
-        array = np.random.randint(255, size=(400, 400),dtype=np.uint8)
-        image = Image.fromarray(array)
+        # array = np.random.randint(255, size=(400, 400),dtype=np.uint8)
+        # image = Image.fromarray(array)
 
-        print(self.name + "_mask.tif")
+        # print(self.name + "_mask.tif")
+
+        top = masque(tk.Toplevel(self.master))
+        top.add(self.filepath, "type")
+
 
 if __name__ == "__main__":
     root = tk.Tk()
