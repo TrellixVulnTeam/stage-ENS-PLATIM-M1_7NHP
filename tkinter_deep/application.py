@@ -32,13 +32,14 @@ class masque(tk.Frame):
         self.img = None
         self.type_masque = None
 
+
         # self.type = type_masque
         # self.img = img
     def add(self, img, type_masque):
         self.img = img
         self.type_masque = type_masque
         self.master.title(type_masque)
-        str = taille_canvas(500,500)
+        str = taille_canvas(256,256)
         self.master.geometry(str)
 
 
@@ -54,8 +55,15 @@ class Application(tk.Frame):
         self.monCanva = None
         self.creat_widget()
         self.add_menu()
+        self.top = None
 
-    
+
+    def print_pred(self):
+        print(self.top)
+        self.top.destroy()
+        self.top = None
+
+
     def creat_widget(self):
         print("creat")
 
@@ -72,7 +80,7 @@ class Application(tk.Frame):
         menu2 = tk.Menu(menubar, tearoff=0)
         menu2.add_command(label="predition", command=self.print_prediction)
         menu2.add_command(label="test", command=self.test)
-        menu2.add_command(label="Coller", command=None)
+        menu2.add_command(label="Coller", command=self.print_pred)
         menubar.add_cascade(label="Editer", menu=menu2)
 
         menu3 = tk.Menu(menubar, tearoff=0)
@@ -83,20 +91,25 @@ class Application(tk.Frame):
 
     def open_img(self):
         self.filepath = askopenfilename(title="Ouvrir une image",filetypes=[('png files','.png'),('tiff files','.tif')])
-        print(self.filepath)
+        # print(self.filepath)
         self.im = Image.open(self.filepath)
 
         self.width, self.height = self.im.size
         self.photo = ImageTk.PhotoImage(self.im)
-        print("self.im", self.im)
+        # print("self.im", self.im)
 
         if self.monCanva is None:
-            self.monCanva = tk.Canvas(self,width = self.width+1, height = self.height+1, bg = "blue")
+            self.monCanva = tk.Canvas(self,width = 2000, height = 2000, bg = "blue")
+            self.monCanva.pack()
+        else:
+            self.monCanva.delete("all")
 
+        # self.monCanva.setvar("width",1000)
         self.monCanva.create_image(0, 0, image = self.photo, anchor=tk.NW)
+        # self.monCanva.resizable(self.width, self.height)
         # self.monCanva.create_oval(1,1,width, height, fill = "red")
         self.monCanva.image = self.im
-        self.monCanva.pack()
+        
         self.master.geometry(taille_canvas(self.width, self.height))
 
         np_im = np.array(self.im)
@@ -105,9 +118,9 @@ class Application(tk.Frame):
     def print_prediction(self):
         self.p = predition_img(self.filepath)
 
-        print(self.p)
-        print(len(self.p))
-        print(len(self.p[0]))
+        # print(self.p)
+        # print(len(self.p))
+        # print(len(self.p[0]))
 
         self.p = self.p.astype(np.uint8)
 
@@ -117,23 +130,27 @@ class Application(tk.Frame):
         # cv2.imwrite(name_mask, self.p)
         # self.im = Image.open(name_mask)
         # self.photoMask = ImageTk.PhotoImage(self.im)
+        # im.resize((width, height))
         new_im = Image.fromarray(self.p)
+        new_im = new_im.resize((self.width, self.height))
+
         # new_im.show()
         self.create_top(new_im)
 
     def create_top(self, new_im):
-        top = tk.Toplevel(self.master)
-        top.title("masque")
-        canvas = tk.Canvas(top, width = self.width+1, height = self.height+1, bg = "red")
+        if self.top is None:
+            self.top = tk.Toplevel(self.master)
+            self.top.title("M_" + self.name)
+        canvas = tk.Canvas(self.top, width = 2000, height = 2000)
         canvas.pack()
         # print(new_im)
         self.photoM = ImageTk.PhotoImage(new_im)
         photo2 = ImageTk.PhotoImage(self.im)
-
+        self.top.geometry(taille_canvas(self.width, self.height))
         # print(photo.height(), photo.width())
         canvas.create_image( 0,0, image = self.photoM, anchor=tk.NW)
         # canvas.image = new_im
-
+        self.top.protocol("WM_DELETE_WINDOW", self.print_pred)
 
     def test(self):
         # array = np.random.randint(255, size=(400, 400),dtype=np.uint8)
