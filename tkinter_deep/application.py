@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter.constants import ACTIVE, DISABLED
 
 import PIL
 from PIL import Image
@@ -77,15 +78,17 @@ class Application(tk.Frame):
         menu1.add_command(label="Quitter", command=self.master.quit)
         menubar.add_cascade(label="Fichier", menu=menu1)
 
-        menu2 = tk.Menu(menubar, tearoff=0)
-        menu2.add_command(label="predition", command=self.print_prediction)
-        menu2.add_command(label="test", command=self.test)
-        menu2.add_command(label="Coller", command=self.print_pred)
-        menubar.add_cascade(label="Editer", menu=menu2)
+        self.menu2 = tk.Menu(menubar, tearoff=0)
+        self.menu2.add_command(label="predition",state=DISABLED, command=self.print_prediction)
+        self.menu2.add_command(label="test", command=self.test)
+        # menu2.add_command(label="Coller", command=self.print_pred)
+        menubar.add_cascade(label="Editer", menu=self.menu2)
 
         menu3 = tk.Menu(menubar, tearoff=0)
         menu3.add_command(label="A propos", command=None)
-        menubar.add_cascade(label="Aide", menu=menu3)
+        # menubar.add_cascade(label="Aide", menu=menu3)
+
+        # .edit.entryconfig(0, state = ACTIVE)
 
         self.master.config(menu=menubar)
 
@@ -113,6 +116,9 @@ class Application(tk.Frame):
         self.master.geometry(taille_canvas(self.width, self.height))
 
         np_im = np.array(self.im)
+
+        self.menu2.entryconfig(0, state = ACTIVE)
+
 
     
     def print_prediction(self):
