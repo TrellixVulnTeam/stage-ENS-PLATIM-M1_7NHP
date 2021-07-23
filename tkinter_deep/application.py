@@ -33,9 +33,6 @@ class masque(tk.Frame):
         self.img = None
         self.type_masque = None
 
-
-        # self.type = type_masque
-        # self.img = img
     def add(self, img, type_masque):
         self.img = img
         self.type_masque = type_masque
@@ -61,7 +58,7 @@ class Application(tk.Frame):
 
     def print_pred(self):
         print(self.top)
-        self.top.destroy()
+        self.top.master.destroy()
         self.top = None
 
 
@@ -73,7 +70,6 @@ class Application(tk.Frame):
 
         menu1 = tk.Menu(menubar, tearoff=0)
         menu1.add_command(label="Ouvir image", command=self.open_img)
-        # menu1.add_command(label="Editer", command=None)
         menu1.add_separator()
         menu1.add_command(label="Quitter", command=self.master.quit)
         menubar.add_cascade(label="Fichier", menu=menu1)
@@ -81,7 +77,9 @@ class Application(tk.Frame):
         self.menu2 = tk.Menu(menubar, tearoff=0)
         self.menu2.add_command(label="predition",state=DISABLED, command=self.print_prediction)
         self.menu2.add_command(label="test", command=self.test)
-        # menu2.add_command(label="Coller", command=self.print_pred)
+
+        self.menu2.add_command(label="enregistrer prediction", command=self.register_pred)
+        # menu2.add_command(label="Coller", command=self.print_pred) , state=DISABLED
         menubar.add_cascade(label="Editer", menu=self.menu2)
 
         menu3 = tk.Menu(menubar, tearoff=0)
@@ -92,14 +90,16 @@ class Application(tk.Frame):
 
         self.master.config(menu=menubar)
 
-    def open_img(self):
-        self.filepath = askopenfilename(title="Ouvrir une image",filetypes=[('png files','.png'),('tiff files','.tif')])
-        # print(self.filepath)
-        self.im = Image.open(self.filepath)
+    def register_pred(self):
+        name_mask = self.name + "_mask.tif"
+        cv2.imwrite(name_mask, self.p)
 
+    def open_img(self):
+        self.filepath = askopenfilename(title = "Ouvrir une image", filetypes = [('png files','.png'),('tiff files','.tif')] )
+    
+        self.im = Image.open(self.filepath)
         self.width, self.height = self.im.size
         self.photo = ImageTk.PhotoImage(self.im)
-        # print("self.im", self.im)
 
         if self.monCanva is None:
             self.monCanva = tk.Canvas(self,width = 2000, height = 2000, bg = "blue")
@@ -124,49 +124,37 @@ class Application(tk.Frame):
     def print_prediction(self):
         self.p = predition_img(self.filepath)
 
-        # print(self.p)
-        # print(len(self.p))
-        # print(len(self.p[0]))
-
         self.p = self.p.astype(np.uint8)
 
         tab = self.filepath.split('/')
         self.name = tab[len(tab)-1].split('.')[0]
         name_mask = self.name + "_mask.tif"
+
         # cv2.imwrite(name_mask, self.p)
         # self.im = Image.open(name_mask)
         # self.photoMask = ImageTk.PhotoImage(self.im)
         # im.resize((width, height))
+        
         new_im = Image.fromarray(self.p)
         new_im = new_im.resize((self.width, self.height))
 
-        # new_im.show()
         self.create_top(new_im)
 
     def create_top(self, new_im):
         if self.top is None:
-            self.top = tk.Toplevel(self.master)
-            self.top.title("M_" + self.name)
-        canvas = tk.Canvas(self.top, width = 2000, height = 2000)
+            # self.top = tk.Toplevel(self.master)
+            self.top = masque(tk.Toplevel(self.master))
+            self.top.master.title("M_" + self.name)
+        canvas = tk.Canvas(self.top.master, width = 2000, height = 2000)
         canvas.pack()
-        # print(new_im)
+
         self.photoM = ImageTk.PhotoImage(new_im)
         photo2 = ImageTk.PhotoImage(self.im)
-        self.top.geometry(taille_canvas(self.width, self.height))
-        # print(photo.height(), photo.width())
+        self.top.master.geometry(taille_canvas(self.width, self.height))
+        
         canvas.create_image( 0,0, image = self.photoM, anchor=tk.NW)
         # canvas.image = new_im
-        self.top.protocol("WM_DELETE_WINDOW", self.print_pred)
-
-    def test(self):
-        # array = np.random.randint(255, size=(400, 400),dtype=np.uint8)
-        # image = Image.fromarray(array)
-
-        # print(self.name + "_mask.tif")
-
-        top = masque(tk.Toplevel(self.master))
-        top.add(self.filepath, "type")
-
+        self.top.master.protocol("WM_DELETE_WINDOW", self.print_pred)
 
 if __name__ == "__main__":
     root = tk.Tk()
